@@ -3,18 +3,27 @@ package br.com.alura.loja;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.junit.After;
+import org.junit.Before;
 
-import java.io.IOException;
 import java.net.URI;
 
-public class Servidor {
-    public static void main(String[] args) throws IOException {
-        URI uri = URI.create("http://localhost:8080/");
+public abstract class ServerTestBase {
+
+    private HttpServer server;
+
+    @Before
+    public void before() {
         ResourceConfig config = new ResourceConfig().packages("br.com.alura.loja");
-        HttpServer server = GrizzlyHttpServerFactory.createHttpServer(uri, config);
+        URI uri = URI.create("http://localhost:8080/");
+
+        this.server = GrizzlyHttpServerFactory.createHttpServer(uri, config);
 
         System.out.println("Servidor rodando");
-        System.in.read();
-        server.stop();
+    }
+
+    @After
+    public void after(){
+        this.server.stop();
     }
 }
